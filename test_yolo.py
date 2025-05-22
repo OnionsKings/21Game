@@ -9,6 +9,11 @@ model = YOLO('C:/Users/HP/Desktop/21/21Game-main/runs/classify/train/weights/bes
 image_path = "C:/Users/HP/Desktop/21/21Game-main/dataset_split/val/8/8c_1.png"
 results = model(image_path)
 
+# 获取最高概率的预测结果
+top_result = results[0].probs.top1
+top_prob = results[0].probs.top1conf
+print(f"Highest probability prediction: {top_result}, with confidence: {top_prob:.2f}")
+
 # 绘制预测结果
 annotated_frame = results[0].plot()
 
