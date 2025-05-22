@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 from albumentations import RandomBrightnessContrast, ISONoise, Blur, Sharpen, HueSaturationValue, Compose
 import os
+import random
 
 # Function to increase brightness
 def increase_brightness(image):
@@ -68,44 +69,25 @@ def apply_augmentation(image, choice):
         return image
 
 # Function to process images in bulk
-def process_images_bulk(input_dir, output_dir):
-    # Ensure the output directory exists
-    os.makedirs(output_dir, exist_ok=True)
+def process_images_bulk(root_dir):
+    augmentation_choices = ['1', '2', '3', '4', '5', '6']
 
-    # Prompt user for choice of augmentation
-    print("Choose an augmentation:")
-    print("1: Increase Brightness")
-    print("2: Lower Brightness")
-    print("3: Add Salt and Pepper Noise")
-    print("4: Color Jittering")
-    print("5: Blur")
-    print("6: Sharpening")
-    choice = input("Enter your choice (1-6): ")
-
-    # Iterate over each file in the input directory
-    for filename in os.listdir(input_dir):
-        input_image_path = os.path.join(input_dir, filename)
-
-        # Check if it's an image file (assuming common image file types)
-        if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff')):
-            # Load the image
-            image = cv2.imread(input_image_path)
-
-            # Check if the image loaded successfully
-            if image is None:
-                print(f"Warning: Unable to load image at {input_image_path}. Skipping this file.")
-                continue
-
-            # Apply the chosen augmentation
-            augmented_image = apply_augmentation(image, choice)
-
-            # Save the augmented image to the output directory
-            output_image_path = os.path.join(output_dir, filename)
-            cv2.imwrite(output_image_path, augmented_image)
-            print(f"Augmented image saved as {output_image_path}")
+    for dirpath, dirnames, filenames in os.walk(root_dir):
+        for filename in filenames:
+            if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.tiff')):
+                input_image_path = os.path.join(dirpath, filename)
+                image = cv2.imread(input_image_path)
+                if image is None:
+                    print(f"Warning: Unable to load image at {input_image_path}. Skipping this file.")
+                    continue
+                choice = random.choice(augmentation_choices)
+                augmented_image = apply_augmentation(image, choice)
+                name, ext = os.path.splitext(filename)
+                output_image_path = os.path.join(dirpath, f"{name}_aug{ext}")
+                cv2.imwrite(output_image_path, augmented_image)
+                print(f"Augmented image saved as {output_image_path}")
 
 if __name__ == "__main__":
     # Usage
     input_dir = "/Users/zhengjeppesen/Desktop/project/21Game/dataset"
-    output_dir = "/Users/zhengjeppesen/Desktop/project/21Game/dataset_augmentation"
-    process_images_bulk(input_dir, output_dir)
+    process_images_bulk(input_dir)
