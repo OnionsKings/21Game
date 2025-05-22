@@ -1,0 +1,17 @@
+train: /Users/zhengjeppesen/Desktop/project/21Game/dataset_split/train
+val: /Users/zhengjeppesen/Desktop/project/21Game/dataset_split/val
+
+names:
+  0: 2
+  1: 3
+  2: 4
+  3: 5
+  4: 6
+  5: 7
+  6: 8
+  7: 9
+  8: 10
+  9: A
+  10: J
+  11: K
+  12: Q
